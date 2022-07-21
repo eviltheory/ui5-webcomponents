@@ -145,14 +145,17 @@ const metadata = {
 		},
 
 		/**
-		 * Defines the opener id of the element that the popover is shown at
+		 * Defines the opener - either the ID of the element that the popover is shown at, or the DOM element itself.
 		 * @public
-		 * @type {String}
+		 * @type {String | Object}
 		 * @defaultvalue ""
 		 * @since 1.2.0
 		 */
 		opener: {
 			type: String,
+			altTypes: [
+				Object,
+			],
 		},
 
 		/**
@@ -305,7 +308,8 @@ class Popover extends Popup {
 
 	onAfterRendering() {
 		if (!this.isOpen() && this.open) {
-			const opener = document.getElementById(this.opener);
+			const opener = this.effectiveOpener();
+
 			if (!opener) {
 				console.warn("Valid opener id is required."); // eslint-disable-line
 				return;
@@ -320,6 +324,13 @@ class Popover extends Popup {
 	isOpenerClicked(event) {
 		const target = event.target;
 		return target === this._opener || (target.getFocusDomRef && target.getFocusDomRef() === this._opener) || event.composedPath().indexOf(this._opener) > -1;
+	}
+
+	effectiveOpener() {
+		if ((typeof this.opener) === "string") {
+			return document.getElementById(this.opener);
+		}
+		return this.opener;
 	}
 
 	/**
