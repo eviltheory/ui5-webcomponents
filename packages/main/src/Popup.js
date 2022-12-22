@@ -141,6 +141,19 @@ const metadata = {
 			type: String,
 			defaultValue: "dialog",
 		},
+
+		/** Indicates if the element is the top modal popup
+		 *
+		 * This property is calculated automatically
+		 *
+		 * @private
+		 * @type {boolean}
+		 * @defaultvalue false
+		 */
+		isTopModalPopup: {
+			type: Boolean,
+			noAttribute: true,
+		},
 	},
 	events: /** @lends sap.ui.webc.main.Popup.prototype */ {
 
@@ -267,11 +280,11 @@ class Popup extends UI5Element {
 		return staticAreaStyles;
 	}
 
-	onEnterDOM() {
-		if (!this.isOpen()) {
-			this._blockLayerHidden = true;
-		}
+	onBeforeRendering() {
+		this._blockLayerHidden = !this.isOpen() || !this.isTopModalPopup;
+	}
 
+	onEnterDOM() {
 		ResizeHandler.register(this, this._resizeHandler);
 	}
 
