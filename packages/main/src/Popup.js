@@ -142,7 +142,8 @@ const metadata = {
 			defaultValue: "dialog",
 		},
 
-		/** Indicates if the element is the top modal popup
+		/**
+		 * Indicates if the element is the top modal popup
 		 *
 		 * This property is calculated automatically
 		 *
