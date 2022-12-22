@@ -129,6 +129,18 @@ const metadata = {
 		_blockLayerHidden: {
 			type: Boolean,
 		},
+
+		/**
+		 * Allows setting a custom role
+		 * @type {string}
+		 * @defaultvalue "dialog"
+		 * @public
+		 * @since 1.11.0
+		 */
+		accessibleRole: {
+			type: String,
+			defaultValue: "dialog",
+		},
 	},
 	events: /** @lends sap.ui.webc.main.Popup.prototype */ {
 
@@ -598,9 +610,9 @@ class Popup extends UI5Element {
 		return this.shadowRoot.querySelector(".ui5-popup-root");
 	}
 
-	get _role() {
-		return "dialog";
-	}
+	// get _role() {
+	// 	return "dialog";
+	// }
 
 	get contentDOM() {
 		return this.shadowRoot.querySelector(".ui5-popup-content");
