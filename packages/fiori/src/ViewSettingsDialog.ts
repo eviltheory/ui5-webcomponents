@@ -183,7 +183,7 @@ class ViewSettingsDialog extends UI5Element {
 	 * @type {object}
 	 * @private
 	 */
-	@property({ type: Object })
+	@property({ type: Object, defaultValue: undefined })
 	_recentlyFocused!: List;
 
 	/**
@@ -574,7 +574,7 @@ class ViewSettingsDialog extends UI5Element {
 	 * Sets focus on recently used control within the dialog.
 	 */
 	_focusRecentlyUsedControl() {
-		if (!this._recentlyFocused || !Object.keys(this._recentlyFocused).length) {
+		if (!this._recentlyFocused) {
 			return;
 		}
 
