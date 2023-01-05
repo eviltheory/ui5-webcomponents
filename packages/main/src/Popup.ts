@@ -211,7 +211,7 @@ abstract class Popup extends UI5Element {
 	 * @type {string}
 	 * @defaultvalue "dialog"
 	 * @public
-	 * @since 1.11.0
+	 * @since 1.10.0
 	 */
 	@property({ defaultValue: "dialog" })
 	accessibleRole!: string;
