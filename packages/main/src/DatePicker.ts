@@ -5,6 +5,7 @@ import event from "@ui5/webcomponents-base/dist/decorators/event.js";
 import { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import { getFeature } from "@ui5/webcomponents-base/dist/FeaturesRegistry.js";
+import type { ComponentStylesData } from "@ui5/webcomponents-base/dist/types.js";
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import modifyDateBy from "@ui5/webcomponents-localization/dist/dates/modifyDateBy.js";
 import getRoundedTimestamp from "@ui5/webcomponents-localization/dist/dates/getRoundedTimestamp.js";
@@ -41,7 +42,6 @@ import Button from "./Button.js";
 import ResponsivePopover from "./ResponsivePopover.js";
 import Calendar from "./Calendar.js";
 import * as CalendarDateComponent from "./CalendarDate.js";
-// @ts-ignore - when the Input is migrated to TS, the comment can't be removed
 import Input from "./Input.js";
 import InputType from "./types/InputType.js";
 import DatePickerTemplate from "./generated/templates/DatePickerTemplate.lit.js";
@@ -58,6 +58,11 @@ import ResponsivePopoverCommonCss from "./generated/themes/ResponsivePopoverComm
 type SelectedDateChangeDetail = {
 	values: Array<string>,
 }
+
+type DatePickerChangeEventDetail = {
+	dates: Array<number>;
+	values: Array<string>
+};
 
 /**
  * @class
@@ -382,7 +387,7 @@ class DatePicker extends DateComponentBase implements IFormElement {
 		return DatePickerPopoverTemplate;
 	}
 
-	static get styles() {
+	static get styles(): ComponentStylesData {
 		return datePickerCss;
 	}
 
@@ -440,7 +445,7 @@ class DatePicker extends DateComponentBase implements IFormElement {
 	 * @returns { number } the calendar timestamp
 	 */
 	get _calendarTimestamp(): number {
-		if (this.value && this._checkValueValidity(this.value)) {
+		if (this.value && this.dateValueUTC && this._checkValueValidity(this.value)) {
 			const millisecondsUTC = this.dateValueUTC.getTime();
 			return getRoundedTimestamp(millisecondsUTC);
 		}
@@ -474,7 +479,7 @@ class DatePicker extends DateComponentBase implements IFormElement {
 			}
 		}
 
-		if ((this._getInput().isEqualNode(e.target) && this.isOpen()) && (isTabNext(e) || isTabPrevious(e) || isF6Next(e) || isF6Previous(e))) {
+		if ((this._getInput().isEqualNode(e.target as Node) && this.isOpen()) && (isTabNext(e) || isTabPrevious(e) || isF6Next(e) || isF6Previous(e))) {
 			this.closePicker();
 		}
 
@@ -544,8 +549,10 @@ class DatePicker extends DateComponentBase implements IFormElement {
 		}
 
 		if (updateValue) {
-			this._getInput().getInputDOMRef().then((innnerInput: HTMLInputElement) => {
-				innnerInput.value = value;
+			this._getInput().getInputDOMRef().then((innerInput: Input | HTMLInputElement | null) => {
+				if (innerInput) {
+					innerInput.value = value;
+				}
 			});
 			this.value = value;
 			this._updateValueState(); // Change the value state to Error/None, but only if needed
@@ -567,7 +574,7 @@ class DatePicker extends DateComponentBase implements IFormElement {
 	}
 
 	_getInput(): Input {
-		return this.shadowRoot!.querySelector("[ui5-input]") as Input;
+		return this.shadowRoot!.querySelector<Input>("[ui5-input]")!;
 	}
 
 	/**
@@ -832,13 +839,13 @@ class DatePicker extends DateComponentBase implements IFormElement {
 	 * @name sap.ui.webc.main.DatePicker.prototype.dateValue
 	 * @type { Date }
 	 */
-	get dateValue(): Date {
+	get dateValue(): Date | null {
 		const utc = undefined as unknown as boolean;
 		const strict = undefined as unknown as boolean;
 		return this.liveValue ? this.getFormat().parse(this.liveValue, utc, strict) as Date : this.getFormat().parse(this.value, utc, strict) as Date;
 	}
 
-	get dateValueUTC() {
+	get dateValueUTC(): Date | null {
 		const utc = undefined as unknown as boolean;
 		const strict = undefined as unknown as boolean;
 		return this.liveValue ? this.getFormat().parse(this.liveValue, true, strict) as Date : this.getFormat().parse(this.value, utc, strict) as Date;
@@ -871,3 +878,5 @@ class DatePicker extends DateComponentBase implements IFormElement {
 DatePicker.define();
 
 export default DatePicker;
+
+export type { DatePickerChangeEventDetail };
