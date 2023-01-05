@@ -329,7 +329,7 @@ class Dialog extends Popup {
 	}
 
 	get _role() {
-		return (this.state === ValueState.Error || this.state === ValueState.Warning) ? "alertdialog" : "dialog";
+		return (this.state === ValueState.Error || this.state === ValueState.Warning) ? "alertdialog" : this.accessibleRole;
 	}
 
 	_show() {
@@ -343,7 +343,6 @@ class Dialog extends Popup {
 		this._isRTL = this.effectiveDir === "rtl";
 		this.onPhone = isPhone();
 		this.onDesktop = isDesktop();
-		this.accessibleRole = this._role;
 	}
 
 	onAfterRendering() {

@@ -624,6 +624,10 @@ class Popup extends UI5Element {
 		return this.shadowRoot.querySelector(".ui5-popup-root");
 	}
 
+	get _role() {
+		return this.accessibleRole;
+	}
+
 	get contentDOM() {
 		return this.shadowRoot.querySelector(".ui5-popup-content");
 	}
