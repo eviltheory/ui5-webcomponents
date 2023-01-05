@@ -133,13 +133,11 @@ const metadata = {
 		/**
 		 * Allows setting a custom role
 		 * @type {string}
-		 * @defaultvalue "dialog"
 		 * @public
 		 * @since 1.11.0
 		 */
 		accessibleRole: {
 			type: String,
-			defaultValue: "dialog",
 		},
 
 		/**
@@ -625,7 +623,7 @@ class Popup extends UI5Element {
 	}
 
 	get _role() {
-		return this.accessibleRole;
+		return this.accessibleRole || "dialog";
 	}
 
 	get contentDOM() {
