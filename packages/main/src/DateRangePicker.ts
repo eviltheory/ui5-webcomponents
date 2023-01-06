@@ -190,7 +190,7 @@ class DateRangePicker extends DatePicker {
 		const input = this._getInput();
 		const caretPos = input.getCaretPosition();
 		await renderFinished();
-		input.setCaretPosition(caretPos!); // Return the caret on the previous position after rendering
+		input.setCaretPosition(caretPos); // Return the caret on the previous position after rendering
 	}
 
 	/**
@@ -258,8 +258,8 @@ class DateRangePicker extends DatePicker {
 		}
 
 		const input = this._getInput();
-		let caretPos: number = input.getCaretPosition()!;
-		let newValue;
+		let caretPos: number = input.getCaretPosition()!; // caret position is always number for input of type text;
+		let newValue: string;
 
 		if (caretPos <= this.value.indexOf(this._effectiveDelimiter)) { // The user is focusing the first date -> change it and keep the second date
 			const startDateModified = modifyDateBy(CalendarDate.fromTimestamp(this._startDateTimestamp! * 1000), amount, unit, this._minDate, this._maxDate);
